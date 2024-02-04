@@ -1,0 +1,64 @@
+/* Base styling for the container */
+.container {
+    padding: 20px;
+    max-width: 600px; /* Set a max-width for larger screens */
+    margin: auto; /* Center the form on the page */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add a subtle shadow for depth */
+    background-color: #fff; /* Background color for the form area */
+  }
+  
+  /* Styling for form elements */
+  .form-group {
+    margin-bottom: 1rem; /* Space out form elements */
+  }
+  
+  .form-control {
+    width: 100%; /* Ensure form controls take up the full container width */
+    padding: 10px; /* Add padding for better touch targets and aesthetics */
+    margin: 5px 0; /* Space out controls vertically */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    border: 1px solid #ccc; /* Add a border to the inputs */
+    border-radius: 4px; /* Slightly round the corners of the inputs */
+  }
+  
+  /* Styling for the ADD button */
+  .btn-success {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 24px; /* Padding to increase button size */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Change mouse cursor to indicate clickable */
+    border-radius: 4px; /* Round button corners */
+  }
+  
+  .btn-success:hover {
+    background-color: #45a049; /* Darken the button on hover */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      width: 90%; /* Make the container take more width on smaller screens */
+      margin: 10px auto; /* Adjust margin for smaller screens */
+    }
+  
+    .form-control, .btn-success {
+      padding: 8px 12px; /* Adjust padding for smaller touch targets */
+    }
+  
+    h2 {
+      font-size: 1.5rem; /* Adjust heading size for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .form-group label {
+      font-size: 0.9rem; /* Make labels smaller on very small screens */
+    }
+  
+    .btn-success {
+      padding: 6px 10px; /* Further reduce padding for the button */
+      font-size: 0.9rem; /* Reduce font size for the button text */
+    }
+  }
+  
