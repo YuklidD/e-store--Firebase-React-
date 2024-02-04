@@ -49,7 +49,7 @@ const Signup = () => {
                 <br />
                 <label htmlFor="password">Password</label>
                 <br />
-                <input type="new-password" className="form-control" required 
+                <input type="password" className="form-control" required 
                     onChange={(e) => setPassword(e.target.value)} value={password}/>
                 <br />
                 <button type="submit" className='btn btn-success btn-md mybtn'>REGISTER</button>
