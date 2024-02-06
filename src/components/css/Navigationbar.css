@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;/* Example font, adjust as needed */
+    font-size: 20px;
 }
 
 
@@ -73,3 +74,14 @@ body {
     background-color: #e9ecef; /* Slightly darker background on hover */
     color: #333;
 }
+
+/* Increase the size of the cart icon */
+.navlink .icon {
+    font-size: 24px; /* Adjust size as needed */
+  }
+  
+  /* Increase font size for logout, login, and signup links/buttons */
+  .navlink, .logout-btn {
+    font-size: 18px; /* Adjust size as needed */
+  }
+  

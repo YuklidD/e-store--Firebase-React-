@@ -7,6 +7,12 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import { auth,db } from './components/config/Config';
 import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { CartContextProvider } from './global/CartContext';
+import { Cashout } from './components/Cashout';
+import { NotFound } from './components/NotFound';
+import Cart from './components/Cart';
+import { SnackbarProvider } from 'notistack';
+
 
 
 
@@ -43,16 +49,23 @@ export class App extends Component{
 
   render(){
   return (
+    <SnackbarProvider maxSnack={3}>
     <ProductsContextProvider>
-    <BrowserRouter>
-      <Switch>
-      <Route exact path='/' component={() => <Home user={this.state.user} />} />
-        <Route path = '/addProducts' component={addProducts}/>
-        <Route path = '/signup' component={Signup}/>
-        <Route path = '/login' component={Login}/>
-      </Switch>
-    </BrowserRouter>
+      <CartContextProvider>
+       <BrowserRouter>
+        <Switch>
+          <Route exact path='/' component={() => <Home user={this.state.user} />} />
+          <Route path = '/addProducts' component={addProducts}/>
+          <Route path = '/signup' component={Signup}/>
+          <Route path = '/login' component={Login}/>
+          <Route path="/cartproducts" component={() => <Cart user={this.state.user} />} />
+          <Route path='/cashout' component={() => <Cashout user={this.state.user} />} />
+          <Route component={NotFound} />                   
+        </Switch>
+      </BrowserRouter>
+    </CartContextProvider>
   </ProductsContextProvider>
+  </SnackbarProvider>
   )
 }
 }
