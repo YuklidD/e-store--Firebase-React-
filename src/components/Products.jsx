@@ -16,6 +16,7 @@ const Products = () => {
             dispatch({ type: 'RESET_ALREADY_IN_CART' });
         }
     }, [alreadyInCart, dispatch, enqueueSnackbar]);
+    
     // Function to handle adding products to the cart
     const handleAddToCart = (product) => {
         if (!product.ProductID || !product.product_price) {
@@ -55,4 +56,3 @@ const Products = () => {
 };
 
 export default Products;
-

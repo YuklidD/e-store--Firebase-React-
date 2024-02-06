@@ -11,7 +11,7 @@ import { CartContextProvider } from './global/CartContext';
 import { Cashout } from './components/Cashout';
 import { NotFound } from './components/NotFound';
 import Cart from './components/Cart';
-import { SnackbarProvider } from 'notistack';
+
 
 
 
@@ -49,7 +49,7 @@ export class App extends Component{
 
   render(){
   return (
-    <SnackbarProvider maxSnack={3}>
+
     <ProductsContextProvider>
       <CartContextProvider>
        <BrowserRouter>
@@ -65,7 +65,8 @@ export class App extends Component{
       </BrowserRouter>
     </CartContextProvider>
   </ProductsContextProvider>
-  </SnackbarProvider>
+
+
   )
 }
 }

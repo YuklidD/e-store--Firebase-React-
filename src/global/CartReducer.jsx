@@ -1,93 +1,106 @@
 export const CartReducer = (state, action) => {
-    const { shoppingCart, totalPrice, totalQty } = state;
+    let { shoppingCart, totalPrice, totalQty, alreadyInCart } = state;
 
     switch (action.type) {
-        case 'ADD_TO_CART':
-            const check = shoppingCart.find(product => product.ProductID === action.product.ProductID);
-            if (check) {
-                return state;
+        case 'ADD_TO_CART': {
+            const productIndex = shoppingCart.findIndex(product => product.ProductID === action.product.ProductID);
+            
+            if (productIndex !== -1) {
+                // Product is already in the cart
+                return { ...state, alreadyInCart: true };
             } else {
                 const newProduct = {
                     ...action.product,
                     qty: 1,
-                    TotalProductPrice: action.product.product_price // Ensure this is a number
+                    TotalProductPrice: action.product.product_price // Assuming product_price is already a number
                 };
                 return {
                     ...state,
                     shoppingCart: [...shoppingCart, newProduct],
-                    totalPrice: state.totalPrice + newProduct.product_price, // Ensure product_price is a number
-                    totalQty: state.totalQty + 1
+                    totalPrice: totalPrice + newProduct.product_price,
+                    totalQty: totalQty + 1,
+                    alreadyInCart: false // Reset the flag when a new product is added
                 };
             }
-        case 'INC':
-            const incrementedIndex = shoppingCart.findIndex(cart => cart.ProductID === action.id);
-            if (incrementedIndex < 0) return state; // If product is not found, do nothing
+        }
+        case 'INC': {
+            const productIndex = shoppingCart.findIndex(cart => cart.ProductID === action.id);
+            if (productIndex === -1) return { ...state, alreadyInCart: false }; // Product not found, reset the flag
 
-            // Update the product details without mutating the state directly
             const incrementedProduct = {
-                ...shoppingCart[incrementedIndex],
-                qty: shoppingCart[incrementedIndex].qty + 1,
-                TotalProductPrice: (shoppingCart[incrementedIndex].qty + 1) * shoppingCart[incrementedIndex].product_price
+                ...shoppingCart[productIndex],
+                qty: shoppingCart[productIndex].qty + 1,
+                TotalProductPrice: (shoppingCart[productIndex].qty + 1) * shoppingCart[productIndex].product_price
             };
 
-            // Construct a new shopping cart array with the updated product
-            const incrementedCart = [
-                ...shoppingCart.slice(0, incrementedIndex),
+            const newShoppingCart = [
+                ...shoppingCart.slice(0, productIndex),
                 incrementedProduct,
-                ...shoppingCart.slice(incrementedIndex + 1)
+                ...shoppingCart.slice(productIndex + 1)
             ];
 
             return {
                 ...state,
-                shoppingCart: incrementedCart,
-                totalPrice: state.totalPrice + incrementedProduct.product_price,
-                totalQty: state.totalQty + 1
+                shoppingCart: newShoppingCart,
+                totalPrice: totalPrice + incrementedProduct.product_price,
+                totalQty: totalQty + 1,
+                alreadyInCart: false // Ensure flag is reset appropriately
             };
-        case 'DEC':
-            const decrementedIndex = shoppingCart.findIndex(cart => cart.ProductID === action.id);
-            if (decrementedIndex < 0) return state; // If product is not found, do nothing
+        }
+        case 'DEC': {
+            const productIndex = shoppingCart.findIndex(cart => cart.ProductID === action.id);
+            if (productIndex === -1) return { ...state, alreadyInCart: false }; // Product not found, reset the flag
 
-            if (shoppingCart[decrementedIndex].qty > 1) {
-                // Update the product details without mutating the state directly
+            if (shoppingCart[productIndex].qty > 1) {
                 const decrementedProduct = {
-                    ...shoppingCart[decrementedIndex],
-                    qty: shoppingCart[decrementedIndex].qty - 1,
-                    TotalProductPrice: (shoppingCart[decrementedIndex].qty - 1) * shoppingCart[decrementedIndex].product_price
+                    ...shoppingCart[productIndex],
+                    qty: shoppingCart[productIndex].qty - 1,
+                    TotalProductPrice: (shoppingCart[productIndex].qty - 1) * shoppingCart[productIndex].product_price
                 };
 
-                // Construct a new shopping cart array with the updated product
-                const decrementedCart = [
-                    ...shoppingCart.slice(0, decrementedIndex),
+                const newShoppingCart = [
+                    ...shoppingCart.slice(0, productIndex),
                     decrementedProduct,
-                    ...shoppingCart.slice(decrementedIndex + 1)
+                    ...shoppingCart.slice(productIndex + 1)
                 ];
 
                 return {
                     ...state,
-                    shoppingCart: decrementedCart,
-                    totalPrice: state.totalPrice - decrementedProduct.product_price,
-                    totalQty: state.totalQty - 1
+                    shoppingCart: newShoppingCart,
+                    totalPrice: totalPrice - decrementedProduct.product_price,
+                    totalQty: totalQty - 1,
+                    alreadyInCart: false // Ensure flag is reset appropriately
                 };
             } else {
-                // If the quantity is 1, do not decrement to avoid negative numbers
-                return state;
+                // If qty is 1, simply return the current state without decrementing
+                return { ...state, alreadyInCart: false };
             }
-        case 'DELETE':
-            const filteredCart = shoppingCart.filter(product => product.ProductID !== action.id);
-            const removedProduct = shoppingCart.find(product => product.ProductID === action.id);
-            if (!removedProduct) return state; // If product is not found, do nothing
+        }
+        case 'DELETE': {
+            const newShoppingCart = shoppingCart.filter(product => product.ProductID !== action.id);
+            const productToRemove = shoppingCart.find(product => product.ProductID === action.id);
+            if (!productToRemove) return { ...state, alreadyInCart: false }; // Product not found, reset the flag
 
             return {
                 ...state,
-                shoppingCart: filteredCart,
-                totalPrice: state.totalPrice - (removedProduct.qty * removedProduct.product_price),
-                totalQty: state.totalQty - removedProduct.qty
+                shoppingCart: newShoppingCart,
+                totalPrice: totalPrice - (productToRemove.qty * productToRemove.product_price),
+                totalQty: totalQty - productToRemove.qty,
+                alreadyInCart: false // Ensure flag is reset appropriately
             };
+        }
         case 'EMPTY':
             return {
+                ...state,
                 shoppingCart: [],
                 totalPrice: 0,
-                totalQty: 0
+                totalQty: 0,
+                alreadyInCart: false // Reset the flag on emptying cart
+            };
+        case 'RESET_ALREADY_IN_CART':
+            return {
+                ...state,
+                alreadyInCart: false // Explicitly handle resetting this flag
             };
         default:
             return state;
