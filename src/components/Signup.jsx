@@ -52,7 +52,7 @@ const Signup = () => {
                 // Update user state here if necessary
             })
             .catch((error) => {
-                setError(error.message);
+                setError(error.message); 
             });
     };
     
