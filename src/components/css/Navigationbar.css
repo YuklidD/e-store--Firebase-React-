@@ -1,87 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
-
-/* Reset margin and padding for the body */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;/* Example font, adjust as needed */
-    font-size: 20px;
-}
-
-
-/* Style for the navigation box */
+/* Navigationbar.css */
 .navbox {
     display: flex;
-    height: 70px;
-    align-items: center;
     justify-content: space-between;
-    padding: 10px; /* Padding around the entire navbox */
-    background-color: #f8f9fa; /* Light background color */
-}
-
-/* Style for the left side of the nav */
-.leftside {
-    display: flex;
     align-items: center;
+    padding: 10px 20px;
+    background-color: #007bff; /* Or any color that matches your design */
+    color: white;
 }
 
-/* Style for the logo image */
-.leftside img {
-    height: 70px; /* Adjust the size as needed */
-    width: auto;
-    margin-right: 20px; /* Space after the logo, if needed */
+.logo {
+    height: 50px; /* Adjust based on your logo size */
 }
 
-/* Style for the right side of the nav */
 .rightside {
     display: flex;
     align-items: center;
+    gap: 20px; /* Adjust the spacing between navbar items */
 }
 
-/* Style for navigation links */
-.navlinks {
+.navlink {
+    color: white;
     text-decoration: none;
-    color: #333; /* Darker text color for contrast */
-    padding: 5px 10px; /* Padding around the links */
-    border-radius: 5px; /* Optional: for rounded corners */
-    transition: background-color 0.3s ease; /* Smooth background transition */
+    transition: color 0.3s ease;
 }
 
-/* Hover effect for navigation links */
-.navlinks:hover {
-    background-color: #e9ecef; /* Slightly darker background on hover */
-    color: #333;
+.navlink:hover, .logout-btn:hover {
+    color: #cce5ff; /* Lighter shade for hover effect */
 }
 
-
-/* Style for the right side of the nav */
-.rightside {
+.icon {
+    position: relative;
     display: flex;
     align-items: center;
 }
 
-/* Style for navigation links */
-.navlinks {
-    text-decoration: none;
-    color: #333; /* Darker text color for contrast */
-    padding: 5px 10px; /* Padding around the links */
-    border-radius: 5px; /* Optional: for rounded corners */
-    transition: background-color 0.3s ease; /* Smooth background transition */
+.cart-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ffc107; /* Bootstrap warning color for contrast */
+    color: black;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
 }
 
-/* Hover effect for navigation links */
-.navlinks:hover {
-    background-color: #e9ecef; /* Slightly darker background on hover */
-    color: #333;
+.logout-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.3s ease;
+    width: 100px;
+    height: 40px;
+    font-size: medium; /* Make logout button text larger */
 }
 
-/* Increase the size of the cart icon */
-.navlink .icon {
-    font-size: 24px; /* Adjust size as needed */
-  }
-  
-  /* Increase font size for logout, login, and signup links/buttons */
-  .navlink, .logout-btn {
-    font-size: 18px; /* Adjust size as needed */
-  }
-  
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbox {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .rightside {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+/* For responsiveness and touch targets */
+@media (max-width: 768px) {
+    .navlink, .logout-btn {
+        font-size: 20px; /* Adjust size for mobile if necessary */
+    }
+}

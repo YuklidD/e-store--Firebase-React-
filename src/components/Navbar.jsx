@@ -1,19 +1,16 @@
-import React from 'react';
-import './css/Navigationbar.css';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import './css/Navigationbar.css'; // Ensure this file is updated as per the CSS below
+import { Link, useHistory } from 'react-router-dom';
 import logo from '../assets/logo.jpeg'; // Adjust the path as necessary
 import { auth } from './config/Config';
+import { cart as cartIcon } from 'react-icons-kit/entypo/cart';
 import { Icon } from 'react-icons-kit';
-import { cart } from 'react-icons-kit/entypo/cart';
-import { useHistory } from 'react-router-dom';
-import { useContext } from 'react';
 import { CartContext } from '../global/CartContext';
 
 const Navbar = ({ user }) => {
     const history = useHistory();
     const { totalQty } = useContext(CartContext);
 
-    // handle logout
     const handleLogout = () => {
         auth.signOut().then(() => {
             history.push('/login');
@@ -21,23 +18,31 @@ const Navbar = ({ user }) => {
     };
 
     return (
-        <div className='navbox'>
+        <nav className='navbox'>
             <div className='leftside'>
                 <Link to="/">
-                    <img src={logo} alt="Home" />
+                    <img src={logo} alt="Home" className="logo" />
                 </Link>
             </div>
-            {!user && <div className='rightside'>
-                <span><Link to="signup" className='navlink'>SIGN UP</Link></span>
-                <span><Link to="login" className='navlink'>LOGIN</Link></span>
-            </div>}
-            {user && <div className='rightside'>
-                <span><Link to="/" className='navlink'>{user}</Link></span>
-                <span><Link to="cartproducts" className='navlink'><Icon size={24} icon={cart} /></Link></span>
-                <span className='no-of-products'>{totalQty}</span>
-                <span><button className='logout-btn' onClick={handleLogout}>Logout</button></span>
-            </div>}
-        </div>
+            <div className='rightside'>
+                {!user ? (
+                    <>
+                        <Link to="/signup" className='navlink'>SIGN UP</Link>
+                        <Link to="/login" className='navlink'>LOGIN</Link>
+                    </>
+                ) : (
+                    <>
+                    <Link to="/" className='navlink'>{user}</Link>
+                    <Link to="/cartproducts" className='navlink icon'>
+                        <Icon size={32} icon={cartIcon} /> {/* Increase size from 24 to 32 or as needed */}
+                        {totalQty > 0 && <span className='cart-badge'>{totalQty}</span>}
+                    </Link>
+                    <button className='logout-btn' onClick={handleLogout}>Logout</button>
+
+                    </>
+                )}
+            </div>
+        </nav>
     );
 };
 

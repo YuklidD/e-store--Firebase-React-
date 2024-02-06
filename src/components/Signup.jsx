@@ -3,7 +3,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { auth, db } from '../components/config/Config';
 import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { FcGoogle } from 'react-icons/fc'; // Importing Google icon from react-icons
+import { FcGoogle } from 'react-icons/fc'; // For Google icon
+import './css/signup.css'; 
+
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -34,60 +36,62 @@ const Signup = () => {
 
     const handleGoogleSignup = () => {
         const provider = new GoogleAuthProvider();
-    
+
         signInWithPopup(auth, provider)
             .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
                 const user = result.user;
-                // Check if user exists in Firestore or add them
                 const userRef = doc(db, 'SignedUpUsersData', user.uid);
                 return setDoc(userRef, {
-                    Name: user.displayName || 'No Name', // Google users have a displayName
+                    Name: user.displayName || 'No Name',
                     Email: user.email,
-                    Cart: [] // Initialize empty cart or retrieve existing one
-                }, { merge: true }); // Use merge true to not overwrite existing data
+                    Cart: []
+                }, { merge: true });
             })
             .then(() => {
                 history.push('/');
-                // Update user state here if necessary
             })
             .catch((error) => {
-                setError(error.message); 
+                setError(error.message);
             });
     };
-    
 
     return (
-        <div className='container'>
-            <br />
-            <h2>Sign Up</h2>
-            <hr />
-            <form autoComplete='off' className='form-group' onSubmit={handleSignup}>
-                <label htmlFor="Name">Name</label>
-                <br />
-                <input type="text" className="form-control" required 
-                    onChange={(e) => setName(e.target.value)} value={name} />
-                <br />
-                <label htmlFor="Email">Email</label>
-                <br />
-                <input type="email" className="form-control" required 
-                    onChange={(e) => setEmail(e.target.value)} value={email}/>
-                <br />
-                <label htmlFor="password">Password</label>
-                <br />
-                <input type="password" className="form-control" required 
-                    onChange={(e) => setPassword(e.target.value)} value={password}/>
-                <br />
-                <button type="submit" className='btn btn-success btn-md mybtn'>REGISTER</button>
-            </form>
-            <br />
-            <button onClick={handleGoogleSignup} className='btn btn-md mybtn' style={{ background: 'transparent', border: '1px solid rgba(0, 0, 0, 0.2)', padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                <FcGoogle size={24}/> Sign up with Google
-            </button>
-            {error && <div className='error-msg'>{error}</div>}
-            <span>Already have an account? Login 
-                <Link to='/login'> Here</Link>
-            </span>
+        <div className='container mt-5'>
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card shadow-lg">
+                        <div className="card-body">
+                            <h2 className="text-center mb-4" style={{color: '#17a2b8'}}>Sign Up</h2>
+                            {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                            <form autoComplete='off' onSubmit={handleSignup}>
+                                <div className="mb-3">
+                                    <label htmlFor="Name" className="form-label">Name</label>
+                                    <input type="text" className="form-control" required 
+                                        onChange={(e) => setName(e.target.value)} value={name} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="Email" className="form-label">Email</label>
+                                    <input type="email" className="form-control" required 
+                                        onChange={(e) => setEmail(e.target.value)} value={email}/>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="password" className="form-label">Password</label>
+                                    <input type="password" className="form-control" required 
+                                        onChange={(e) => setPassword(e.target.value)} value={password}/>
+                                </div>
+                                <button type="submit" className='btn btn-primary w-100'>Register</button>
+                            </form>
+                            <hr />
+                            <button onClick={handleGoogleSignup} className='btn btn-light border w-100 mt-3'>
+                                <FcGoogle size={24}/> Sign up with Google
+                            </button>
+                            <div className="text-center mt-3">
+                                Already have an account? <Link to='/login' className="text-primary">Login Here</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

@@ -5,9 +5,9 @@ import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import { ic_remove } from 'react-icons-kit/md/ic_remove';
 import { iosTrashOutline } from 'react-icons-kit/ionicons/iosTrashOutline';
-import { Link, useHistory } from 'react-router-dom'; // Combined imports for react-router-dom
+import { Link, useHistory } from 'react-router-dom';
 import { auth } from './config/Config';
-import './css/cart.css';
+import './css/cart.css'; 
 
 const Cart = ({ user }) => {
     const { shoppingCart, dispatch, totalPrice, totalQty } = useContext(CartContext);
@@ -24,52 +24,43 @@ const Cart = ({ user }) => {
     return (
         <>
             <Navbar user={user} />
-            {shoppingCart.length !== 0 && <h1>Cart</h1>}
-            <div className='cart-container'>
-                {shoppingCart.length === 0 && (
-                    <>
-                        <div>no items in your cart or slow internet causing trouble (Refresh the page) or you are not logged in</div>
-                        <div><Link to="/">Return to Home page</Link></div>
-                    </>
-                )}
-                {shoppingCart.map(cartItem => (
-                    <div className='cart-card' key={cartItem.ProductID}>
-                        <div className='cart-img'>
-                            <img src={cartItem.product_img} alt={cartItem.product_name} /> {/* Corrected the property names */}
+            <div className="container py-5">
+                <h1 className="mb-4">Your Cart</h1>
+                <div className="row gy-4">
+                    {shoppingCart.map(cartItem => (
+                        <div className="col-md-4 d-flex" key={cartItem.ProductID}>
+                            <div className="card flex-grow-1">
+                                <img src={cartItem.product_img} className="card-img-top" alt={cartItem.product_name} />
+                                <div className="card-body d-flex flex-column">
+                                    <h5 className="card-title">{cartItem.product_name}</h5>
+                                    <p className="card-text">Price: Rs {cartItem.product_price}</p>
+                                    <div className="mt-auto">
+                                        <div className="btn-group" role="group" aria-label="Basic example">
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => dispatch({ type: 'DEC', id: cartItem.ProductID, cart: cartItem })}>
+                                                <Icon icon={ic_remove} size={16} />
+                                            </button>
+                                            <span className="btn btn-light">{cartItem.qty}</span>
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => dispatch({ type: 'INC', id: cartItem.ProductID, cart: cartItem })}>
+                                                <Icon icon={ic_add} size={16} />
+                                            </button>
+                                        </div>
+                                        <button className="btn btn-danger btn-sm ms-2" onClick={() => dispatch({ type: 'DELETE', id: cartItem.ProductID, cart: cartItem })}>
+                                            <Icon icon={iosTrashOutline} size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className='cart-name'>{cartItem.product_name}</div> {/* Corrected the property names */}
-                        <div className='cart-price-orignal'>Rs {cartItem.product_price}.00</div> {/* Corrected the property names */}
-                        <div className='inc' onClick={() => dispatch({ type: 'INC', id: cartItem.ProductID, cart: cartItem })}>
-                            <Icon icon={ic_add} size={24} />
-                        </div>
-                        <div className='quantity'>{cartItem.qty}</div>
-                        <div className='dec' onClick={() => dispatch({ type: 'DEC', id: cartItem.ProductID, cart: cartItem })}>
-                            <Icon icon={ic_remove} size={24} />
-                        </div>
-                        <div className='cart-price'>
-                            Rs {cartItem.TotalProductPrice}.00
-                        </div>
-                        <button className='delete-btn' onClick={() => dispatch({ type: 'DELETE', id: cartItem.ProductID, cart: cartItem })}>
-                            <Icon icon={iosTrashOutline} size={24} />
-                        </button>
-                    </div>
-                ))}
+                    ))}
+                </div>
                 {shoppingCart.length > 0 && (
-                    <div className='cart-summary'>
-                        <div className='cart-summary-heading'>Cart-Summary</div>
-                        <div className='cart-summary-price'>
-                            <span>Total Price</span>
-                            <span>{totalPrice}</span>
+                    <div className="card mt-5">
+                        <div className="card-body">
+                            <h5 className="card-title">Cart Summary</h5>
+                            <p className="card-text">Total Price: Rs {totalPrice}</p>
+                            <p className="card-text">Total Quantity: {totalQty}</p>
+                            <Link to="cashout" className="btn btn-primary">Proceed to Checkout</Link>
                         </div>
-                        <div className='cart-summary-price'>
-                            <span>Total Qty</span>
-                            <span>{totalQty}</span>
-                        </div>
-                        <Link to='cashout' className='cashout-link'>
-                            <button className='btn btn-success btn-md' style={{ marginTop: '5px' }}>
-                                Cash on delivery
-                            </button>
-                        </Link>
                     </div>
                 )}
             </div>
