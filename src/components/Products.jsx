@@ -1,8 +1,10 @@
+// Products.js
 import React, { useContext, useEffect } from 'react';
 import { ProductsContext } from '../global/ProductsContext';
-import './css/Products.css';
 import { CartContext } from '../global/CartContext';
 import { useSnackbar } from 'notistack';
+import LazyImage from './LazyImage'; // Import LazyImage component
+import './css/Products.css';
 
 const Products = () => {
     const { products } = useContext(ProductsContext);
@@ -41,7 +43,7 @@ const Products = () => {
                 {products.map((product) => (
                     <div className='product-card' key={product.ProductID}>
                         <div className='product-img'>
-                            <img src={product.product_img} alt={product.product_name} />
+                            <LazyImage src={product.product_img} alt={product.product_name} />
                         </div>
                         <div className='product-info'>
                             <div className='product-name'>{product.product_name}</div>
